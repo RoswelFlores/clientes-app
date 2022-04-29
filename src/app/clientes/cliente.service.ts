@@ -6,6 +6,7 @@ import { HttpClient,HttpEvent,HttpHeaders, HttpRequest } from '@angular/common/h
 import { map , catchError, tap} from 'rxjs';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { Region } from './region';
 
 
 @Injectable({
@@ -17,6 +18,11 @@ export class ClienteService {
 
   private HttpHeaders = new HttpHeaders({'Content-type':'application/json'})
   constructor(private http: HttpClient, private router : Router) { }
+
+  getRegiones(): Observable<Region[]> {
+    return this.http.get<Region[]>(this.urlEndpoint + '/regiones');
+  }
+
 
   getClientes(page: number): Observable<any>{
     //return of(CLIENTES);
