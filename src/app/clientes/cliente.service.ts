@@ -17,10 +17,24 @@ export class ClienteService {
   private urlEndpoint:string = 'http://localhost:8080/api/clientes';
 
   private HttpHeaders = new HttpHeaders({'Content-type':'application/json'})
+
   constructor(private http: HttpClient, private router : Router) { }
 
+  public isNoAutorizado(e): boolean{
+    if(e.status==401 || e.status ==403){
+      this.router.navigate(['/login'])
+      return true;
+    }
+    return false;
+  }
+
   getRegiones(): Observable<Region[]> {
-    return this.http.get<Region[]>(this.urlEndpoint + '/regiones');
+    return this.http.get<Region[]>(this.urlEndpoint + '/regiones').pipe(
+      catchError(e=>{
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    );
   }
 
 
@@ -57,6 +71,10 @@ export class ClienteService {
     return this.http.post<Cliente>(this.urlEndpoint,cliente,{headers: this.HttpHeaders}).pipe(
       catchError(e =>{
 
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+
         if(e.status==400){
 
           return throwError(e);
@@ -72,6 +90,11 @@ export class ClienteService {
   getCliente(id): Observable<Cliente>{
     return this.http.get<Cliente>(`${this.urlEndpoint}/${id}`).pipe(
       catchError(e =>{
+        
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
         swal.fire('Error al editar', e.error.mensaje, 'error');
@@ -82,6 +105,11 @@ export class ClienteService {
   update(cliente: Cliente): Observable<Cliente>{
     return this.http.put<Cliente>(`${this.urlEndpoint}/${cliente.id}`,cliente,{headers: this.HttpHeaders}).pipe(
       catchError(e =>{
+
+        
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
 
         if(e.status==400){
           
@@ -98,6 +126,11 @@ export class ClienteService {
   delete(id: number): Observable<Cliente>{
     return this.http.delete<Cliente>(`${this.urlEndpoint}/${id}`,{headers: this.HttpHeaders}).pipe(
       catchError(e =>{
+        
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+
         console.error(e.error.mensaje);
         swal.fire(e.error.mensaje,e.error.error,'error');
         return throwError(e);
@@ -105,7 +138,7 @@ export class ClienteService {
     )
   }
 
-  subirFoto(archivo:File,id): Observable<HttpEvent<{}>>{
+  subirFoto(archivo:File,id): Observable<HttpEvent<any>>{
 
     let formData = new FormData();
     formData.append("archivo",archivo);
@@ -114,7 +147,12 @@ export class ClienteService {
     const req = new HttpRequest('POST',`${this.urlEndpoint}/upload`,formData,{
       reportProgress:true
     });
-    return this.http.request(req); 
+    return this.http.request(req).pipe(
+      catchError(e=>{
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    );; 
     
   }
 }
