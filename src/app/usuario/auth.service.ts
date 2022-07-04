@@ -16,11 +16,11 @@ export class AuthService {
   public get usuario(): Usuario{
     if(this._usuario != null){
       return this._usuario
-    }else if(this.usuario == null && sessionStorage.getItem('usuario') != null){
+    }else if(this._usuario == null && sessionStorage.getItem('usuario') != null){
       this._usuario = JSON.parse(sessionStorage.getItem('usuario')) as Usuario;
       return this._usuario;
     }
-    return new Usuario();
+    return new Usuario();  
   }
   public get token(): string{
     if(this._token != null){
@@ -79,5 +79,12 @@ export class AuthService {
       return true;
     }
     return false;
+  }
+  logout():void{
+    this._token = null;
+    this._usuario= null;
+    sessionStorage.clear();
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('usuario');
   }
 }
