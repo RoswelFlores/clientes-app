@@ -63,7 +63,7 @@ export class AuthService {
 
   guardarToken(accessToken:string):void{
     this._token = accessToken;
-    sessionStorage.setItem('token ',accessToken);
+    sessionStorage.setItem('token',accessToken);
   }
 
   ObtenerDatosToken(accessToken:string):any{
@@ -75,7 +75,7 @@ export class AuthService {
   
   isAuthenticated():boolean{
     let payload = this.ObtenerDatosToken(this.token);
-    if(payload != null && payload.user_name && payload.user_name.length>0){
+    if(payload != null && payload.user_name && payload.user_name.length > 0){
       return true;
     }
     return false;

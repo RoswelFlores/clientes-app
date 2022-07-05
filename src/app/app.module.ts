@@ -19,6 +19,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import { DetalleComponent } from './clientes/detalle/detalle.component';
 import { LoginComponent } from './usuario/login.component';
+import { AuthGuard } from './usuario/guards/auth.guard';
+import { RoleGuard } from './usuario/guards/role.guard';
 
 
 registerLocaleData(localeEs,'es');
@@ -28,9 +30,9 @@ const routes: Routes =[
   {path: 'directivas', component: DirectivaComponent},
   {path: 'clientes', component: ClientesComponent},
   {path: 'clientes/page/:page', component: ClientesComponent},
-  {path: 'clientes/form/:id', component: FormComponent},
+  {path: 'clientes/form/:id', component: FormComponent,canActivate:[AuthGuard,RoleGuard],data:{role:'ROLE_ADMIN'}},
   {path: 'login', component: LoginComponent},
-  {path: 'clientes/form', component: FormComponent}
+  {path: 'clientes/form', component: FormComponent,canActivate:[AuthGuard,RoleGuard],data:{role:'ROLE_ADMIN'}}
 ];
 
 @NgModule({
