@@ -25,7 +25,7 @@ export class AuthService {
   public get token(): string{
     if(this._token != null){
       return this._token
-    }else if(this.usuario == null && sessionStorage.getItem('token') != null){
+    }else if(this._token == null && sessionStorage.getItem('token') != null){
       this._token = sessionStorage.getItem('token');
       return this._token;
     }
@@ -80,6 +80,14 @@ export class AuthService {
     }
     return false;
   }
+  
+  hasRole(role:string):boolean{
+    if(this.usuario.roles.includes(role)){
+      return true;
+    }
+    return false;
+  }
+
   logout():void{
     this._token = null;
     this._usuario= null;

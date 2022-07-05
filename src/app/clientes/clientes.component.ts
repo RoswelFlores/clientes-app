@@ -5,6 +5,7 @@ import swal from 'sweetalert2';
 import { tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ModalService } from './detalle/modal.service';
+import { AuthService } from '../usuario/auth.service';
 
 @Component({
   selector: 'app-clientes',
@@ -18,7 +19,8 @@ export class ClientesComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
      public modalService: ModalService,
-    private activatedRouted : ActivatedRoute) { }
+      public authService:AuthService,
+      private activatedRouted : ActivatedRoute) { }
 
   ngOnInit(): void {
     

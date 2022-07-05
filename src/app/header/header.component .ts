@@ -15,7 +15,7 @@ export class HeaderComponent{
     constructor(public authService : AuthService, public router:Router){}
     logout():void{
           let username = this.authService.usuario.username;
-        this.authService.logout();
+          this.authService.logout();
         Swal.fire('Logout',`Hola ${username} , has cerrado sesion con exito`,'success');
         this.router.navigate(['/login']);
     }
